@@ -81,7 +81,25 @@ export class HTTPPrometheusClient implements PrometheusClient {
   private readonly apiPrefix: string = '/api/v1';
   // For some reason, just assigning via "= fetch" here does not end up executing fetch correctly
   // when calling it, thus the indirection via another function wrapper.
-  private readonly fetchFn: FetchFn = (input: RequestInfo, init?: RequestInit): Promise<Response> => fetch(input, init);
+  private readonly fetchFn: FetchFn = <T,>(input: RequestInfo, init?: RequestInit): Promise<T> => {
+    return fetch(input, init)
+      .then((res) => {
+        if (!res.ok && ![badRequest, unprocessableEntity, serviceUnavailable].includes(res.status)) {
+          throw new Error(res.statusText);
+        }
+        return res;
+      })
+      .then((res) => res.json())
+      .then((apiRes: APIResponse<T>) => {
+        if (apiRes.status === 'error') {
+          throw new Error(apiRes.error !== undefined ? apiRes.error : 'missing "error" field in response JSON');
+        }
+        if (apiRes.data === undefined) {
+          throw new Error('missing "data" field in response JSON');
+        }
+        return apiRes.data;
+      });
+  }
 
   constructor(config: PrometheusConfig) {
     this.url = config.url ? config.url : '';
@@ -210,23 +228,7 @@ export class HTTPPrometheusClient implements PrometheusClient {
   }
 
   private fetchAPI<T>(resource: string, init?: RequestInit): Promise<T> {
-    return this.fetchFn(this.url + resource, init)
-      .then((res) => {
-        if (!res.ok && ![badRequest, unprocessableEntity, serviceUnavailable].includes(res.status)) {
-          throw new Error(res.statusText);
-        }
-        return res;
-      })
-      .then((res) => res.json())
-      .then((apiRes: APIResponse<T>) => {
-        if (apiRes.status === 'error') {
-          throw new Error(apiRes.error !== undefined ? apiRes.error : 'missing "error" field in response JSON');
-        }
-        if (apiRes.data === undefined) {
-          throw new Error('missing "data" field in response JSON');
-        }
-        return apiRes.data;
-      });
+    return this.fetchFn<T>(this.url + resource, init);
   }
 
   private buildRequest(endpoint: string, params: URLSearchParams) {

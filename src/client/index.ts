@@ -13,4 +13,4 @@
 
 export { PrometheusClient, PrometheusConfig, CacheConfig } from './prometheus';
 
-export type FetchFn = (input: RequestInfo, init?: RequestInit) => Promise<Response>;
+export type FetchFn = <T,>(input: RequestInfo, init?: RequestInit) => Promise<T>;
