@@ -68,7 +68,7 @@ function arrayToCompletionResult(data, from, to, includeSnippet = false, span = 
         from: from,
         to: to,
         options: options,
-        span: span ? /^[a-zA-Z0-9_:]+$/ : undefined,
+        validFor: span ? /^[a-zA-Z0-9_:]+$/ : undefined,
     };
 }
 // computeStartCompleteLabelPositionInLabelMatcherOrInGroupingLabel calculates the start position only when the node is a LabelMatchers or a GroupingLabels

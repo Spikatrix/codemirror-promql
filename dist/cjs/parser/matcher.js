@@ -28,7 +28,7 @@ var parser_terms_1 = require("../grammar/parser.terms");
 var types_1 = require("../types");
 function createMatcher(labelMatcher, state) {
     var matcher = new types_1.Matcher(0, '', '');
-    var cursor = labelMatcher.cursor;
+    var cursor = labelMatcher.cursor();
     if (!cursor.next()) {
         // weird case, that would mean the labelMatcher doesn't have any child.
         return matcher;

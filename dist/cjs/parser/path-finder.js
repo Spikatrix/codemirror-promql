@@ -16,7 +16,7 @@ exports.retrieveAllRecursiveNodes = exports.containsChild = exports.containsAtLe
 // walkBackward will iterate other the tree from the leaf to the root until it founds the given `exit` node.
 // It returns null if the exit is not found.
 function walkBackward(node, exit) {
-    var cursor = node.cursor;
+    var cursor = node.cursor();
     var cursorIsMoving = true;
     while (cursorIsMoving && cursor.type.id !== exit) {
         cursorIsMoving = cursor.parent();
@@ -33,7 +33,7 @@ function walkThrough(node) {
     for (var _i = 1; _i < arguments.length; _i++) {
         path[_i - 1] = arguments[_i];
     }
-    var cursor = node.cursor;
+    var cursor = node.cursor();
     var i = 0;
     var cursorIsMoving = true;
     path.unshift(cursor.type.id);
@@ -59,7 +59,7 @@ function containsAtLeastOneChild(node) {
     for (var _i = 1; _i < arguments.length; _i++) {
         child[_i - 1] = arguments[_i];
     }
-    var cursor = node.cursor;
+    var cursor = node.cursor();
     if (!cursor.next()) {
         // let's try to move directly to the children level and
         // return false immediately if the current node doesn't have any child
@@ -77,7 +77,7 @@ function containsChild(node) {
     for (var _i = 1; _i < arguments.length; _i++) {
         child[_i - 1] = arguments[_i];
     }
-    var cursor = node.cursor;
+    var cursor = node.cursor();
     if (!cursor.next()) {
         // let's try to move directly to the children level and
         // return false immediately if the current node doesn't have any child

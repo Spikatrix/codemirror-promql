@@ -14,10 +14,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PromQLExtension = exports.promQLLanguage = exports.LanguageType = void 0;
 var parser_1 = require("./grammar/parser");
-var highlight_1 = require("@codemirror/highlight");
 var complete_1 = require("./complete");
 var lint_1 = require("./lint");
 var language_1 = require("@codemirror/language");
+var highlight_1 = require("@lezer/highlight");
 var LanguageType;
 (function (LanguageType) {
     LanguageType["PromQL"] = "PromQL";

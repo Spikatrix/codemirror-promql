@@ -11,10 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 import { parser } from './grammar/parser';
-import { styleTags, tags } from '@codemirror/highlight';
 import { newCompleteStrategy } from './complete';
 import { newLintStrategy, promQLLinter } from './lint';
 import { LRLanguage } from '@codemirror/language';
+import { styleTags, tags } from '@lezer/highlight';
 export var LanguageType;
 (function (LanguageType) {
     LanguageType["PromQL"] = "PromQL";
